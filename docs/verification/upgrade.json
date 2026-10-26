@@ -1,0 +1,142 @@
+{
+  "baselineMigrations": 20,
+  "newMigrations": 3,
+  "preserved": true,
+  "before": {
+    "import": [
+      {
+        "json_build_object": {
+          "users": 2,
+          "clients": 2,
+          "specialists": 1,
+          "services": 2,
+          "appointments": 2,
+          "courses": 2,
+          "coursePayments": 1,
+          "courseCash": 2000,
+          "paidAppointments": 2,
+          "oneOffCash": 450,
+          "clientImages": 1,
+          "clientImageDigest": "c58e1f36e78214ac465e8fce44c7a3d0",
+          "receipts": 1,
+          "receiptDigest": "42cce704b90d77178ce227ff18e8d9ff",
+          "expenses": 1,
+          "inventorySales": 0
+        }
+      }
+    ],
+    "courses": [
+      {
+        "id": "legacy-course",
+        "usedLessons": 3,
+        "price": 4000,
+        "paidAmount": 2000,
+        "specialistPayPerSession": 110,
+        "legacyImported": false
+      },
+      {
+        "id": "legacy-course-child",
+        "usedLessons": 6,
+        "price": 3500,
+        "paidAmount": 3500,
+        "specialistPayPerSession": 95,
+        "legacyImported": true
+      }
+    ],
+    "appointments": [
+      {
+        "id": "legacy-course-visit",
+        "price": 0,
+        "specialistPay": 95,
+        "paymentStatus": "PAID",
+        "status": "COMPLETED"
+      },
+      {
+        "id": "legacy-visit",
+        "price": 450,
+        "specialistPay": 120,
+        "paymentStatus": "PAID",
+        "status": "COMPLETED"
+      }
+    ],
+    "balances": [
+      {
+        "id": "legacy-child",
+        "balance": 0
+      },
+      {
+        "id": "legacy-client",
+        "balance": 123.45
+      }
+    ]
+  },
+  "after": {
+    "import": [
+      {
+        "json_build_object": {
+          "users": 2,
+          "clients": 2,
+          "specialists": 1,
+          "services": 2,
+          "appointments": 2,
+          "courses": 2,
+          "coursePayments": 1,
+          "courseCash": 2000,
+          "paidAppointments": 2,
+          "oneOffCash": 450,
+          "clientImages": 1,
+          "clientImageDigest": "c58e1f36e78214ac465e8fce44c7a3d0",
+          "receipts": 1,
+          "receiptDigest": "42cce704b90d77178ce227ff18e8d9ff",
+          "expenses": 1,
+          "inventorySales": 0
+        }
+      }
+    ],
+    "courses": [
+      {
+        "id": "legacy-course",
+        "usedLessons": 3,
+        "price": 4000,
+        "paidAmount": 2000,
+        "specialistPayPerSession": 110,
+        "legacyImported": false
+      },
+      {
+        "id": "legacy-course-child",
+        "usedLessons": 6,
+        "price": 3500,
+        "paidAmount": 3500,
+        "specialistPayPerSession": 95,
+        "legacyImported": true
+      }
+    ],
+    "appointments": [
+      {
+        "id": "legacy-course-visit",
+        "price": 0,
+        "specialistPay": 95,
+        "paymentStatus": "PAID",
+        "status": "COMPLETED"
+      },
+      {
+        "id": "legacy-visit",
+        "price": 450,
+        "specialistPay": 120,
+        "paymentStatus": "PAID",
+        "status": "COMPLETED"
+      }
+    ],
+    "balances": [
+      {
+        "id": "legacy-child",
+        "balance": 0
+      },
+      {
+        "id": "legacy-client",
+        "balance": 123.45
+      }
+    ]
+  },
+  "notes": "Synthetic non-production fixture. Legacy byte payloads verify exact data preservation, not image decoding."
+}

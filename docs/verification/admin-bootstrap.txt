@@ -1,0 +1,9 @@
+test_cleanup_and_no_secret_output_after_child_failure (test_create_admin.AdminBootstrapTest.test_cleanup_and_no_secret_output_after_child_failure) ... ok
+test_mismatch_refused_before_database_command (test_create_admin.AdminBootstrapTest.test_mismatch_refused_before_database_command) ... ok
+test_noninteractive_terminal_refused_before_password_read (test_create_admin.AdminBootstrapTest.test_noninteractive_terminal_refused_before_password_read) ... ok
+test_private_credential_file_and_cleanup_after_success (test_create_admin.AdminBootstrapTest.test_private_credential_file_and_cleanup_after_success) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.024s
+
+OK

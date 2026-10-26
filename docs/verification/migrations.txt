@@ -1,0 +1,84 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+Loaded Prisma config from prisma.config.ts.
+
+Prisma config detected, skipping environment variable loading.
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "postgres", schema "public" at "127.0.0.1:55433"
+
+23 migrations found in prisma/migrations
+
+Applying migration `20260512152512_add_users`
+Applying migration `20260512154657_add_users`
+Applying migration `20260512160446_add_services`
+Applying migration `20260512160958_appointment_relations`
+Applying migration `20260512165037_scheduler_v2`
+Applying migration `20260514073501_add_duration`
+Applying migration `20260514073638_specialist_colors`
+Applying migration `20260514075118_add_is_paid_del_pending_status`
+Applying migration `20260517140648_specialist_specializations`
+Applying migration `20260818033000_pricing_discounts_payroll`
+Applying migration `20260818050000_phone_auth`
+Applying migration `20260820090000_client_record_card`
+Applying migration `20260820113000_massage_payroll_inventory_sales`
+Applying migration `20260820123000_fix_massage_payroll_floor`
+Applying migration `20260820213000_admin_expenses`
+Applying migration `20260820224500_soft_archive_users`
+Applying migration `20260821010000_course_legacy_import`
+Applying migration `20260821014500_shared_client_phone_profiles`
+Applying migration `20260821015500_course_specialist_pay_snapshot`
+Applying migration `20260821023000_course_partial_payments`
+Applying migration `20261020100000_security_sessions_audit`
+Applying migration `20261020110000_service_management_snapshots`
+Applying migration `20261020120000_course_void_financial_history`
+
+The following migration(s) have been applied:
+
+migrations/
+  └─ 20260512152512_add_users/
+    └─ migration.sql
+  └─ 20260512154657_add_users/
+    └─ migration.sql
+  └─ 20260512160446_add_services/
+    └─ migration.sql
+  └─ 20260512160958_appointment_relations/
+    └─ migration.sql
+  └─ 20260512165037_scheduler_v2/
+    └─ migration.sql
+  └─ 20260514073501_add_duration/
+    └─ migration.sql
+  └─ 20260514073638_specialist_colors/
+    └─ migration.sql
+  └─ 20260514075118_add_is_paid_del_pending_status/
+    └─ migration.sql
+  └─ 20260517140648_specialist_specializations/
+    └─ migration.sql
+  └─ 20260818033000_pricing_discounts_payroll/
+    └─ migration.sql
+  └─ 20260818050000_phone_auth/
+    └─ migration.sql
+  └─ 20260820090000_client_record_card/
+    └─ migration.sql
+  └─ 20260820113000_massage_payroll_inventory_sales/
+    └─ migration.sql
+  └─ 20260820123000_fix_massage_payroll_floor/
+    └─ migration.sql
+  └─ 20260820213000_admin_expenses/
+    └─ migration.sql
+  └─ 20260820224500_soft_archive_users/
+    └─ migration.sql
+  └─ 20260821010000_course_legacy_import/
+    └─ migration.sql
+  └─ 20260821014500_shared_client_phone_profiles/
+    └─ migration.sql
+  └─ 20260821015500_course_specialist_pay_snapshot/
+    └─ migration.sql
+  └─ 20260821023000_course_partial_payments/
+    └─ migration.sql
+  └─ 20261020100000_security_sessions_audit/
+    └─ migration.sql
+  └─ 20261020110000_service_management_snapshots/
+    └─ migration.sql
+  └─ 20261020120000_course_void_financial_history/
+    └─ migration.sql
+      
+All migrations have been successfully applied.

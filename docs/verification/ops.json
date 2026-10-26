@@ -1,0 +1,8 @@
+{
+  "shellSyntaxFiles": 8,
+  "nodeSyntaxFiles": 51,
+  "yamlParsed": 2,
+  "configGeneratorAndOverwriteRefusal": "PASS",
+  "historicalMigrationsUnchanged": 20,
+  "dockerDaemon": "NOT AVAILABLE: container build and runtime-role checks are in CI"
+}

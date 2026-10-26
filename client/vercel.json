@@ -1,0 +1,57 @@
+{
+    "$schema":  "https://openapi.vercel.sh/vercel.json",
+    "rewrites":  [
+                     {
+                         "source":  "/api/:path*",
+                         "destination":  "https://api-178-104-200-182.sslip.io/:path*"
+                     },
+                     {
+                         "source":  "/((?!api/).*)",
+                         "destination":  "/index.html"
+                     }
+                 ],
+    "headers":  [
+                    {
+                        "source":  "/(.*)",
+                        "headers":  [
+                                        {
+                                            "key":  "Content-Security-Policy",
+                                            "value":  "default-src \u0027self\u0027; script-src \u0027self\u0027; style-src \u0027self\u0027 \u0027unsafe-inline\u0027; img-src \u0027self\u0027 data: blob:; font-src \u0027self\u0027 data:; connect-src \u0027self\u0027; object-src \u0027none\u0027; base-uri \u0027none\u0027; frame-ancestors \u0027none\u0027; form-action \u0027self\u0027; upgrade-insecure-requests"
+                                        },
+                                        {
+                                            "key":  "X-Content-Type-Options",
+                                            "value":  "nosniff"
+                                        },
+                                        {
+                                            "key":  "X-Frame-Options",
+                                            "value":  "DENY"
+                                        },
+                                        {
+                                            "key":  "Referrer-Policy",
+                                            "value":  "no-referrer"
+                                        },
+                                        {
+                                            "key":  "Permissions-Policy",
+                                            "value":  "camera=(), microphone=(), geolocation=()"
+                                        }
+                                    ]
+                    },
+                    {
+                        "source":  "/api/:path*",
+                        "headers":  [
+                                        {
+                                            "key":  "Cache-Control",
+                                            "value":  "private, no-store, max-age=0"
+                                        },
+                                        {
+                                            "key":  "CDN-Cache-Control",
+                                            "value":  "no-store"
+                                        },
+                                        {
+                                            "key":  "Vercel-CDN-Cache-Control",
+                                            "value":  "no-store"
+                                        }
+                                    ]
+                    }
+                ]
+}

@@ -1,0 +1,103 @@
+name: dorsum
+x-api: &api
+  image: dorsum-api:${RELEASE_TAG:-2.1.0}
+  build:
+    context: ../../server
+  env_file: ./secrets/app.env
+  restart: unless-stopped
+  read_only: true
+  tmpfs:
+    - /tmp:rw,nosuid,size=128m
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  pids_limit: 128
+  mem_limit: 1g
+  stop_grace_period: 30s
+  networks: [data, edge]
+
+services:
+  db:
+    image: postgres:18-bookworm
+    environment:
+      POSTGRES_DB: dorsum
+      POSTGRES_USER: dorsum_owner
+      POSTGRES_PASSWORD_FILE: /run/secrets/db-owner-password
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+      TZ: Europe/Kyiv
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      - ./secrets/db-owner-password:/run/secrets/db-owner-password:ro
+      - ./secrets/db-app-password:/run/secrets/db-app-password:ro
+      - ./db-grants.sql:/ops/db-grants.sql:ro
+    networks: [data]
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    shm_size: 256m
+    mem_limit: 1536m
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U dorsum_owner -d dorsum]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    logging: &logs
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+  api:
+    <<: *api
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      data: {}
+      edge: {}
+    logging: *logs
+
+  migrate:
+    <<: *api
+    profiles: [ops]
+    restart: "no"
+    env_file: ./secrets/migrate.env
+    command: [npx, prisma, migrate, deploy]
+    depends_on:
+      db:
+        condition: service_healthy
+    logging: *logs
+
+  caddy:
+    image: caddy:2-alpine
+    environment:
+      API_DOMAIN: ${API_DOMAIN:?Set API_DOMAIN in .env}
+      ACME_EMAIL: ${ACME_EMAIL:?Set ACME_EMAIL in .env}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      edge:
+        ipv4_address: 172.30.18.2
+    restart: unless-stopped
+    depends_on: [api]
+    security_opt: [no-new-privileges:true]
+    logging: *logs
+
+networks:
+  data:
+    internal: true
+  edge:
+    ipam:
+      config:
+        - subnet: 172.30.18.0/24
+          # Keep Caddy's fixed .2 address outside automatic allocation.
+          ip_range: 172.30.18.128/25
+          gateway: 172.30.18.1
+
+volumes:
+  postgres_data:
+  caddy_data:
+  caddy_config:

@@ -1,0 +1,40 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> server@2.1.0 test:integration
+> node --test --test-concurrency=1 test/integration/*.test.mjs
+
+✔ anonymous cannot reach private records, finance or audit; debug endpoints are gone (1732.837585ms)
+✔ clients cannot list the schedule, run availability enumeration or access foreign courses/photos (51.060402ms)
+✔ specialists cannot access other clients or administrator actions (35.600908ms)
+✔ public team and service responses expose no payroll fields or user identifiers (6.880468ms)
+✔ client-facing profiles and courses do not expose internal specialist payroll (19.836332ms)
+✔ forged role claims, unsigned tokens, legacy tokens and algorithm confusion fail (5.375788ms)
+✔ refresh requires same-origin CSRF header and never returns a refresh token in JSON (281.383677ms)
+✔ logout revokes access tokens immediately (276.824028ms)
+✔ archiving an account or changing its role invalidates old sessions in the database (257.482482ms)
+✔ a client cannot override role, balance, ownership or submit SQL operator objects (6.654513ms)
+✔ private images require a complete decoded image, are encrypted, and remain inaccessible to strangers (48.608002ms)
+✔ normal booking survives hardening and permits only assigned specialist to see a record (53.879701ms)
+✔ absence blocks booking and cannot be created over an existing appointment (42.98683ms)
+✔ past SCHEDULED entries can be corrected and moved into a future slot (32.417589ms)
+✔ legacy half-paid courses bring zero cash and block lessons after the paid half (55.86265ms)
+✔ one-off to course conversion uses course service and specialist pay without double consumption (136.302919ms)
+✔ children share a parent phone but have independent profiles and courses (350.403387ms)
+✔ price and payout edits preserve old visits and sold courses; finances equal expected amounts (198.423214ms)
+✔ percentage payouts use actual discounted prices and course per-lesson share (40.930792ms)
+✔ group capacity is enforced and payouts support participant or whole-session accounting (208.916991ms)
+✔ massage policies cannot rewrite past months and clients cannot reach catalogue administration (284.384578ms)
+✔ unused course cancellation preserves sale and appends one refund with retry safety (33.834424ms)
+✔ login throttling persists per account and blocks an eleventh failed attempt (2399.440997ms)
+✔ new massage rates are versioned from a future month and duplicate effective dates are rejected (30.796201ms)
+﹣ native PostgreSQL serializes overlapping bookings with different time boundaries (0.176311ms) # SKIP
+﹣ native PostgreSQL inserts a second half payment once under concurrent requests (0.053259ms) # SKIP
+✔ authenticated writes and private record reads are recorded without passwords or patient text (5.813226ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 2
+ℹ todo 0
+ℹ duration_ms 7121.082408

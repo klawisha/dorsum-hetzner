@@ -1,0 +1,12 @@
+2026-10-26 — Caddy network address allocation fix
+
+PASS: Caddy 172.30.18.2 belongs to the edge subnet but is outside the automatic 172.30.18.128/25 pool.
+PASS: gateway 172.30.18.1 is outside the automatic pool and differs from Caddy.
+PASS: no other Compose service settings, volumes, secrets, ports, privileges or trust-proxy address changed.
+PASS: CI attempts a real Caddy container network attachment after API starts, catching the previously untested startup order.
+PASS: every shell block in docs/NETWORK_FIX_RU.md passes bash -n.
+PASS: the documented patch applies to the delivered original compose.yml and produces the intended YAML.
+PASS: repeated patch application is a no-op; the original backup is retained; an unexpected file layout is rejected without modification.
+
+NOT RUN LOCALLY: Docker networking, native Caddy startup, GitHub Actions, or production HTTPS.
+Docker is not installed in this workspace. Execute the documented recovery on the VPS and run the updated CI in GitHub.

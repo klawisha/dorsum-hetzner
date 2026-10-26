@@ -1,0 +1,2 @@
+import AppointmentCalendar from '../features/appointments/AppointmentCalendar'
+export default function AdminDashboard(){return <div className="admin-page"><div style={{display:'flex',alignItems:'end',justifyContent:'space-between',gap:16,marginBottom:20}}><div><p style={{margin:0,color:'#f6c453',fontSize:12,fontWeight:900,letterSpacing:1.8}}>РАСПИСАНИЕ</p><h1 style={{margin:'5px 0 0'}}>Admin Dashboard</h1></div></div><AppointmentCalendar mode="admin"/></div>}

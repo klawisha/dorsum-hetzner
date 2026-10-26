@@ -1,0 +1,24 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> server@2.1.0 test
+> node --test --test-concurrency=1 test/*.test.mjs
+
+✔ production fails closed without real secret or explicit origins (1.455607ms)
+✔ new passwords are strong and bounded by bcrypt byte limit; old short passwords can log in (0.323209ms)
+✔ mass assignment, prototype payloads and forged privileged fields are rejected (2.468388ms)
+✔ negative money, non-boolean flags and excessive durations are rejected (1.948938ms)
+✔ unexpected SQL, Prisma and internal errors do not reach clients (0.281627ms)
+✔ encryption binds media to a record and detects any tampering (2.174162ms)
+✔ a complete image is decoded, stripped of metadata and re-encoded (20.089456ms)
+✔ fake image signatures, SVG, corrupt base64 and MIME spoofing are rejected (3.669638ms)
+✔ oversized image and oversized pixel count are rejected (289.237784ms)
+✔ centre time uses Kyiv timezone and rejects nonexistent dates (1.745537ms)
+✔ cash periods use Kyiv calendar boundaries even on a UTC server (0.568362ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 537.008037

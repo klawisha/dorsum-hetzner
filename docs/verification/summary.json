@@ -1,0 +1,41 @@
+{
+  "release": "2.1.0",
+  "date": "2026-10-20",
+  "node": "24.19.0 (deployment and CI use Node.js 22)",
+  "unit": {
+    "passed": 11,
+    "failed": 0
+  },
+  "integration": {
+    "passed": 25,
+    "failed": 0,
+    "skipped": 2,
+    "engine": "PGlite PostgreSQL WASM; Prisma TCP and real migration CLI"
+  },
+  "nativeConcurrency": "Two tests pending in GitHub Actions with PostgreSQL 18",
+  "ui": {
+    "checks": 48,
+    "errors": 0,
+    "widths": [
+      320,
+      375,
+      390,
+      768,
+      1024,
+      1440
+    ],
+    "data": "Synthetic API mocks in Chromium"
+  },
+  "migrations": {
+    "fresh": 23,
+    "historicalUnchanged": 20,
+    "upgradePreserved": true
+  },
+  "audit": {
+    "server": 0,
+    "client": 0
+  },
+  "frontendLint": "PASS",
+  "frontendProductionBuild": "PASS; non-blocking bundle size warning",
+  "deployment": "Shell/Python/Node syntax and generator checked. Real Docker, DNS, VPS, source production DB and off-site restore not run here."
+}

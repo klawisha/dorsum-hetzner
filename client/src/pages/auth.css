@@ -1,0 +1,257 @@
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    radial-gradient(circle at top left,
+      rgba(246,196,83,0.16),
+      transparent 30%),
+    linear-gradient(180deg,#0b0c10,#111216);
+
+  padding: 24px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+
+  background:
+    rgba(255,255,255,0.05);
+
+  border:
+    1px solid rgba(255,255,255,0.08);
+
+  backdrop-filter: blur(18px);
+
+  border-radius: 30px;
+
+  padding: 36px;
+
+  color: white;
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.35);
+}
+
+.auth-card h1 {
+  margin-top: 0;
+  margin-bottom: 28px;
+
+  font-size: 38px;
+
+  color: #f6c453;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth-form input {
+  background:
+    rgba(255,255,255,0.08);
+
+  border:
+    1px solid rgba(255,255,255,0.12);
+
+  border-radius: 14px;
+
+  padding: 14px;
+
+  color: white;
+
+  font-size: 15px;
+
+  outline: none;
+
+  transition: .25s ease;
+}
+
+.auth-form input:focus {
+  border-color: #f6c453;
+
+  box-shadow:
+    0 0 0 3px rgba(246,196,83,0.15);
+}
+
+.auth-form input::placeholder {
+  color: #9ca3af;
+}
+
+.auth-form button {
+  margin-top: 8px;
+
+  background: #f6c453;
+
+  color: #111;
+
+  border: none;
+
+  border-radius: 14px;
+
+  padding: 14px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition: .25s ease;
+}
+
+.auth-form button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 28px rgba(246,196,83,0.22);
+}
+
+.auth-error {
+  color: #ef4444;
+  margin-top: 10px;
+}
+
+.auth-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(246,196,83,0.18), transparent 28%),
+    radial-gradient(circle at 85% 25%, rgba(255,255,255,0.08), transparent 30%),
+    linear-gradient(180deg, #0b0c10 0%, #111216 45%, #0f1014 100%);
+  color: #fff;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 450px;
+  padding: 38px;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.055);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow:
+    0 25px 80px rgba(0,0,0,0.42),
+    0 0 40px rgba(246,196,83,0.08);
+  backdrop-filter: blur(20px);
+}
+
+.auth-label {
+  color: #f6c453;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 12px;
+  font-weight: 800;
+  margin: 0 0 12px;
+}
+
+.auth-card h1 {
+  margin: 0;
+  font-size: 44px;
+  letter-spacing: -2px;
+  background: linear-gradient(135deg, #ffffff, #f6c453);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.auth-subtitle {
+  color: #aeb0b8;
+  line-height: 1.6;
+  margin: 14px 0 28px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 15px 16px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  color: #fff;
+  outline: none;
+  font-size: 15px;
+  transition: 0.25s ease;
+  box-sizing: border-box;
+}
+
+.auth-form input::placeholder {
+  color: #8f949e;
+}
+
+.auth-form input:focus {
+  border-color: #f6c453;
+  box-shadow: 0 0 0 4px rgba(246,196,83,0.14);
+}
+
+.auth-form button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 16px;
+  background: #f6c453;
+  color: #111;
+  font-weight: 900;
+  cursor: pointer;
+  transition: 0.25s ease;
+  box-sizing: border-box;
+}
+
+.auth-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(246,196,83,0.25);
+}
+
+.auth-secondary-button {
+  background: rgba(255,255,255,0.08) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+}
+
+.auth-secondary-button:hover {
+  border-color: rgba(246,196,83,0.5) !important;
+}
+
+.auth-error {
+  color: #ef4444;
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.25);
+  padding: 12px;
+  border-radius: 14px;
+  margin-bottom: 16px;
+}
+
+
+
+
+
+@media (max-width: 520px) {
+  .auth-page {
+    padding: 16px;
+  }
+
+  .auth-card {
+    padding: 26px;
+    border-radius: 24px;
+  }
+
+  .auth-card h1 {
+    font-size: 36px;
+  }
+}
+
+.auth-card {
+  overflow: hidden;
+}
+/* shared footer on authentication screens */
+.auth-platform-shell { min-height:100vh; display:flex; flex-direction:column; background:linear-gradient(180deg,#0b0c10,#111216); }
+.auth-platform-shell .auth-page { flex:1 0 auto; min-height:calc(100vh - 150px); }
+.auth-platform-shell > .platform-footer { flex:0 0 auto; }

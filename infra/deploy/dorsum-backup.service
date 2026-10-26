@@ -1,0 +1,9 @@
+[Unit]
+Description=Dorsum encrypted database and image backup
+Requires=docker.service
+After=docker.service
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/opt/dorsum/infra/deploy
+ExecStart=/bin/bash /opt/dorsum/infra/deploy/backup.sh

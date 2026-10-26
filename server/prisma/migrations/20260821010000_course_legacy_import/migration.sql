@@ -1,0 +1,2 @@
+ALTER TABLE "Course"
+  ADD COLUMN IF NOT EXISTS "legacyImported" BOOLEAN NOT NULL DEFAULT false;

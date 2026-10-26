@@ -1,0 +1,7 @@
+[Unit]
+Description=Daily Dorsum session maintenance
+[Timer]
+OnCalendar=*-*-* 04:00:00 Europe/Kyiv
+Persistent=true
+[Install]
+WantedBy=timers.target

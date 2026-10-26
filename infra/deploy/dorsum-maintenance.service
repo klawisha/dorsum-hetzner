@@ -1,0 +1,8 @@
+[Unit]
+Description=Remove expired Dorsum sessions and login throttles
+Requires=docker.service
+After=docker.service
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/dorsum/infra/deploy
+ExecStart=/usr/bin/docker compose run --rm --no-deps api node scripts/maintenance.mjs

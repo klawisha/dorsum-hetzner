@@ -1,0 +1,26 @@
+{
+  email {$ACME_EMAIL}
+  admin off
+}
+{$API_DOMAIN} {
+  encode zstd gzip
+  request_body {
+    max_size 8MB
+  }
+  header {
+    -Server
+    Strict-Transport-Security "max-age=31536000"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "DENY"
+    Referrer-Policy "no-referrer"
+  }
+  reverse_proxy api:5000 {
+    # Replace spoofable forwarded headers. Rate limits are also per account.
+    header_up X-Forwarded-For {remote_host}
+    header_up X-Forwarded-Proto https
+    transport http {
+      dial_timeout 5s
+      response_header_timeout 20s
+    }
+  }
+}

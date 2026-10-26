@@ -1,0 +1,466 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+enum AppointmentStatus {
+  SCHEDULED
+  COMPLETED
+  NOT_COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+}
+
+enum CoursePaymentState {
+  UNPAID
+  HALF_PAID
+  PAID
+}
+
+// -------- Users / Roles ----------------
+
+model User {
+  id       String @id @default(cuid())
+  email    String? @unique // legacy / optional; new accounts use phone
+  phone    String? @unique
+  password String
+  role     Role   @default(CLIENT)
+
+  // Soft archive: keeps profiles and all historical foreign-key relations intact.
+  active            Boolean   @default(true)
+  deactivatedAt     DateTime?
+  deactivatedReason String?
+
+  clientProfile     ClientProfile?
+  specialistProfile SpecialistProfile?
+
+  sessions AuthSession[]
+
+  createdAt DateTime @default(now())
+
+  @@index([active, role])
+}
+
+model ClientProfile {
+  id String @id @default(cuid())
+
+  // Optional for ADMIN-managed dependent profiles that share a contact phone
+  // with another client. PostgreSQL unique constraints allow multiple NULLs.
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id])
+
+  fullName  String
+  phone     String?
+  birthDate DateTime?
+
+  balance Float @default(0)
+
+  notes String?
+
+  isMilitary  Boolean @default(false)
+  isPensioner Boolean @default(false)
+
+  // Soft state lives on the profile too because ADMIN-only dependent profiles
+  // may intentionally have no User/login account.
+  active      Boolean @default(true)
+  managedOnly Boolean @default(false)
+
+  appointments Appointment[]
+  courses Course[]
+  cardImage ClientCardImage?
+  inventorySales InventorySale[]
+
+  createdAt DateTime @default(now())
+
+  @@index([phone, active])
+}
+
+model SpecialistProfile {
+  id String @id @default(cuid())
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  fullName String
+
+  specialization  String? //dEL
+
+  specializations String[] @default([])
+
+  salaryPercent Float?
+
+  fixedSalary Float?
+
+  workingHours WorkingHours[]
+  blocks       SpecialistBlock[]
+
+  appointments Appointment[]
+
+  color String @default("#0b8560")
+
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  CLIENT
+  ADMIN
+  SPECIALIST
+}
+
+model WorkingHours {
+  id String @id @default(cuid())
+
+  specialistId String
+  specialist   SpecialistProfile @relation(fields: [specialistId], references: [id])
+
+  dayOfWeek Int // 0-6 (Sun-Sat)
+  startTime String // "09:00"
+  endTime   String // "18:00"
+}
+
+// ------ Services ----------------
+
+model Service {
+  id String @id @default(cuid())
+
+  title           String
+  price           Float
+  durationMinutes Int
+  category        String  @default("OTHER")
+  audience String @default("ALL")
+  specialistPayMode String @default("FIXED")
+  specialistPayPercent Float @default(0)
+  groupPayMode String @default("PER_CLIENT")
+  isPackage       Boolean @default(false)
+  packageSessions Int?
+  specialistPayPerSession Float @default(0)
+  active          Boolean @default(true)
+
+  // Payroll metadata. The tier system is data-driven and can be disabled
+  // without changing appointments or historical specialistPay snapshots.
+  massageHalfHourTracking      Boolean @default(false)
+  massageTieredPay               Boolean @default(false)
+  massagePayClassMinutes         Int?
+  // If enabled, payroll uses max(tier pay, Appointment.specialistPay).
+  // Useful for services that have a guaranteed fixed minimum.
+  massageUseHigherOfTierAndFixed Boolean @default(false)
+
+  groupAllowed Boolean @default(false)
+  maxClients   Int     @default(1)
+
+  appointments Appointment[] //????????????? 
+  courses Course[]
+
+  createdAt DateTime @default(now())
+}
+
+// -------------- Appointment ----------------
+
+model Appointment {
+  id String @id @default(cuid())
+
+  clientId     String
+  specialistId String
+
+  serviceId String
+
+  startTime DateTime
+  endTime   DateTime
+
+  duration Int @default(30)
+
+  notes String?
+
+  roomId String?
+  room   Room?   @relation(fields: [roomId], references: [id])
+
+  price Float
+  basePrice Float?
+  discountPercent Float @default(0)
+  discountReason String?
+  paidAt DateTime?
+  specialistPay Float @default(0)
+  payConfig Json?
+
+  status        AppointmentStatus @default(SCHEDULED)
+  paymentStatus     PaymentStatus     @default(PENDING)
+
+  createdAt DateTime @default(now())
+
+  client     ClientProfile     @relation(fields: [clientId], references: [id])
+  specialist SpecialistProfile @relation(fields: [specialistId], references: [id])
+  service    Service           @relation(fields: [serviceId], references: [id])
+  
+  courseId String?
+  course   Course? @relation(fields: [courseId], references: [id])
+
+  @@index([specialistId, startTime, endTime])
+  @@index([clientId, startTime, endTime])
+  @@index([paymentStatus, paidAt])
+}
+
+model Course {
+  id              String   @id @default(cuid())
+
+  clientId        String
+  client          ClientProfile @relation(fields: [clientId], references: [id])
+
+  title           String
+  totalLessons    Int
+  usedLessons     Int      @default(0)
+
+  price           Float
+  basePrice       Float?
+  discountPercent Float @default(0)
+  discountReason  String?
+  paidAt          DateTime?
+  serviceId       String?
+  service         Service? @relation(fields: [serviceId], references: [id])
+  isPaid          Boolean  @default(true)
+
+  // Course payment lifecycle. `isPaid` is kept for backwards compatibility
+  // and is true only when the full course price has been paid.
+  paymentState    CoursePaymentState @default(PAID)
+  paidAmount      Float @default(0)
+
+  // Payroll snapshot at course sale/import time.
+  specialistPayPerSession Float?
+  payConfig Json?
+
+  // Imported from the centre's pre-Dorsum records. The historical purchase
+  // is preserved as a course but contributes 0 to current Dorsum cash.
+  legacyImported   Boolean  @default(false)
+  voidedAt DateTime?
+  voidReason String?
+
+  startsAt        DateTime?
+  expiresAt       DateTime?
+
+  createdAt       DateTime @default(now())
+
+  appointments    Appointment[]
+  payments        CoursePayment[]
+
+  @@index([voidedAt])
+}
+
+model CoursePayment {
+  id        String   @id @default(cuid())
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Restrict)
+
+  amount    Float
+  kind      String
+  paidAt    DateTime @default(now())
+
+  createdAt DateTime @default(now())
+
+  @@index([paidAt])
+  @@index([courseId, paidAt])
+}
+
+
+model Room {
+  id       String @id @default(cuid())
+  name     String
+  capacity Int    @default(1)
+
+  appointments Appointment[]
+}
+
+model SpecialistBlock {
+  id String @id @default(cuid())
+  specialistId String
+  specialist SpecialistProfile @relation(fields: [specialistId], references: [id], onDelete: Cascade)
+  startTime DateTime
+  endTime DateTime
+  reason String?
+  createdAt DateTime @default(now())
+
+  @@index([specialistId, startTime, endTime])
+}
+
+
+model ClientCardImage {
+  id String @id @default(cuid())
+
+  clientId String @unique
+  client ClientProfile @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  fileName String
+  mimeType String
+  byteSize Int
+  data Bytes
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+// ---------- Configurable massage payroll ----------
+
+model MassagePayrollPolicy {
+  id String @id @default(cuid())
+
+  name String
+  enabled Boolean @default(true)
+
+  // Versioned policy window. To change rates without rewriting history,
+  // close the old policy with effectiveTo and add a new one.
+  effectiveFrom DateTime
+  effectiveTo   DateTime?
+
+  tiers MassagePayrollTier[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([effectiveFrom, effectiveTo])
+}
+
+model MassagePayrollTier {
+  id String @id @default(cuid())
+
+  policyId String
+  policy MassagePayrollPolicy @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  minHalfHours Int
+  maxHalfHours Int?
+
+  pay30 Float
+  pay60 Float
+  pay90 Float
+
+  sortOrder Int @default(0)
+
+  @@index([policyId, minHalfHours])
+}
+
+// ---------- Inventory retail ----------
+
+model InventoryItem {
+  id String @id @default(cuid())
+
+  name String @unique
+  price Float @default(0)
+  active Boolean @default(true)
+  sortOrder Int @default(0)
+
+  sales InventorySale[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model InventorySale {
+  id String @id @default(cuid())
+
+  itemId String
+  item InventoryItem @relation(fields: [itemId], references: [id])
+
+  clientId String?
+  client ClientProfile? @relation(fields: [clientId], references: [id], onDelete: SetNull)
+
+  quantity Int
+  unitPrice Float
+  total Float
+
+  soldAt DateTime @default(now())
+  note String?
+
+  // Financial records are voided instead of hard-deleted.
+  voidedAt DateTime?
+  voidReason String?
+
+  createdAt DateTime @default(now())
+
+  @@index([soldAt])
+  @@index([itemId])
+  @@index([clientId])
+}
+
+
+// ---------- Administrative expenses ----------
+
+model Expense {
+  id String @id @default(cuid())
+
+  title String
+  amount Float
+  purchasedAt DateTime @default(now())
+  note String?
+
+  // Financial records are voided instead of physically deleted.
+  voidedAt DateTime?
+  voidReason String?
+
+  receipt ExpenseReceipt?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([purchasedAt])
+}
+
+model ExpenseReceipt {
+  id String @id @default(cuid())
+
+  expenseId String @unique
+  expense Expense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+
+  fileName String
+  mimeType String
+  byteSize Int
+  data Bytes
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+// Refresh tokens are random opaque values. Only SHA-256 hashes are stored.
+model AuthSession {
+  id String @id
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime @default(now())
+  lastUsedAt DateTime @default(now())
+  @@index([userId, expiresAt])
+}
+model LoginThrottle {
+  key String @id
+  attempts Int
+  windowStart DateTime
+  @@index([windowStart])
+}
+model AuditEvent {
+  id String @id @default(cuid())
+  actorId String
+  action String
+  route String
+  targetId String?
+  statusCode Int
+  requestId String
+  createdAt DateTime @default(now())
+  @@index([createdAt])
+  @@index([actorId, createdAt])
+}
